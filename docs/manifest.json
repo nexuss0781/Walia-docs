@@ -1,0 +1,31 @@
+{
+  "Part 1: Philosophy & Vision": [
+    "part-1/01_philosophy_and_vision.md",
+    "part-1/02_getting_started.md",
+    "part-1/03_types_and_values.md",
+    "part-1/04_variables_and_persistence.md",
+    "part-1/05_expression_oriented_logic.md",
+    "part-1/06_functions_and_closures.md",
+    "part-1/07_algebraic_effects.md",
+    "part-1/08_integrated_testing.md",
+    "part-1/09_standard_library_reference.md"
+  ],
+  "Part 2: Virtual Machine Specification": [
+    "part-2/10_isa_overview.md",
+    "part-2/11_bytecode_specification.md",
+    "part-2/12_nan_boxing_internals.md",
+    "part-2/13_register_window_dynamics.md",
+    "part-2/14_opcode_reference.md",
+    "part-2/15_dispatch_and_execution_loop.md",
+    "part-2/16_orthogonal_persistence_mechanics.md",
+    "part-2/17_generational_gc_architecture.md",
+    "part-2/18_write_barrier_and_card_marking.md",
+    "part-2/19_native_module_interface_ffi.md",
+    "part-2/20_observability_and_telemetry.md",
+    "part-2/21_standard_collections_and_io.md",
+    "part-2/22_cli_usage_and_flags.md",
+    "part-2/23_versioning_and_module_safety.md",
+    "part-2/24_time_travel_debugging.md",
+    "part-2/25_conclusion_the_sovereign_future.md"
+  ]
+}
