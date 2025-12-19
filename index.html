@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walia Docs | Enterprise Reader</title>
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root { --primary: #0f172a; --accent: #3b82f6; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #fcfcfd;
+            /* Security: Prevent Text Selection */
+            -webkit-user-select: none; user-select: none;
+        }
+
+        /* Documentation Content Styling */
+        .prose-custom h1 { @apply text-4xl font-extrabold text-slate-900 mb-6 pb-4 border-b; }
+        .prose-custom h2 { @apply text-2xl font-bold text-slate-800 mt-10 mb-4; }
+        .prose-custom p { @apply text-slate-600 leading-relaxed mb-4; }
+        .prose-custom code { @apply bg-slate-100 px-1.5 py-0.5 rounded text-sm font-mono text-pink-600; }
+        .prose-custom pre { @apply bg-slate-900 rounded-xl p-4 my-6 overflow-x-auto shadow-lg; }
+        .prose-custom ul { @apply list-disc ml-6 mb-4 text-slate-600; }
+
+        /* Security: Hide content when printing */
+        @media print { body { display: none !important; } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Top Navigation Bar -->
+    <nav class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-30 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xl">W</div>
+            <span class="text-xl font-bold tracking-tight text-slate-800">Walia <span class="text-blue-600">Docs</span></span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <span class="hidden md:block text-xs font-semibold bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase tracking-widest">Enterprise Read-Only</span>
+            <button id="mobile-toggle" class="md:hidden p-2 text-slate-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        <!-- Dynamic Sidebar -->
+        <aside id="sidebar" class="absolute inset-y-0 left-0 w-72 bg-white border-r border-slate-200 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Library</h3>
+                    <button id="refresh-docs" class="text-slate-400 hover:text-blue-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="file-list" class="space-y-1">
+                    <!-- Dynamic links injected here -->
+                    <div class="p-4 text-center text-slate-400 text-sm italic">Scanning docs folder...</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Viewer -->
+        <main class="flex-1 overflow-y-auto relative bg-[#fcfcfd]">
+            <div id="content-loader" class="hidden absolute inset-0 bg-white/50 backdrop-blur-[2px] z-10 items-center justify-center">
+                <div class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-6 py-12 md:px-16">
+                <div id="view-placeholder" class="mt-20 text-center">
+                    <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-slate-800">Welcome to Walia Docs</h2>
+                    <p class="text-slate-500 mt-2">Select a document from the sidebar to start reading.</p>
+                </div>
+                <article id="md-render" class="prose-custom hidden"></article>
+            </div>
+        </main>
+
+        <!-- Mobile Overlay -->
+        <div id="overlay" class="fixed inset-0 bg-slate-900/50 z-30 hidden backdrop-blur-sm"></div>
+    </div>
+
+    <script>
+        const DOCS_DIR = './docs/';
+        const fileList = document.getElementById('file-list');
+        const mdRender = document.getElementById('md-render');
+        const placeholder = document.getElementById('view-placeholder');
+        const loader = document.getElementById('content-loader');
+
+        // SECURITY: Block common save/copy shortcuts
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'c' || e.key === 'u' || e.key === 'p')) {
+                e.preventDefault();
+                alert('Enterprise Security: Exporting/Copying is disabled.');
+            }
+        });
+
+        // Toggle Sidebar
+        const toggleSidebar = () => {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('overlay').classList.toggle('hidden');
+        };
+        document.getElementById('mobile-toggle').onclick = toggleSidebar;
+        document.getElementById('overlay').onclick = toggleSidebar;
+
+        /**
+         * DYNAMIC FILE DISCOVERY
+         * This fetches the directory itself and parses the HTML links
+         */
+        async function scanDocs() {
+            try {
+                const response = await fetch(DOCS_DIR);
+                const html = await response.text();
+                
+                // Use a virtual DOM to parse the directory listing
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'));
+                
+                // Filter for .md files and clean names
+                const mdFiles = links
+                    .map(a => a.getAttribute('href'))
+                    .filter(href => href && href.endsWith('.md'))
+                    .map(href => decodeURIComponent(href).split('/').pop());
+
+                renderSidebar(mdFiles);
+            } catch (err) {
+                fileList.innerHTML = `<div class="text-red-500 text-xs bg-red-50 p-3 rounded">
+                    Error: Directory listing must be enabled on the server.
+                </div>`;
+            }
+        }
+
+        function renderSidebar(files) {
+            if (files.length === 0) {
+                fileList.innerHTML = `<div class="text-slate-400 text-xs italic">No .md files found.</div>`;
+                return;
+            }
+
+            fileList.innerHTML = '';
+            files.forEach(fileName => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left px-4 py-3 text-sm font-medium text-slate-600 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all flex items-center gap-3 group mb-1";
+                const displayName = fileName.replace('.md', '').replace(/[-_]/g, ' ');
+                
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-40 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <span class="truncate">${displayName}</span>
+                `;
+                
+                btn.onclick = () => loadDocument(fileName, btn);
+                fileList.appendChild(btn);
+            });
+        }
+
+        async function loadDocument(fileName, activeBtn) {
+            // UI Handling
+            document.querySelectorAll('#file-list button').forEach(b => b.classList.remove('bg-blue-100', 'text-blue-700', 'shadow-sm'));
+            activeBtn.classList.add('bg-blue-100', 'text-blue-700', 'shadow-sm');
+            
+            if (window.innerWidth < 768) toggleSidebar();
+            
+            loader.classList.replace('hidden', 'flex');
+            placeholder.classList.add('hidden');
+            mdRender.classList.remove('hidden');
+
+            try {
+                const res = await fetch(DOCS_DIR + fileName);
+                const md = await res.text();
+                
+                mdRender.innerHTML = marked.parse(md);
+                Prism.highlightAllUnder(mdRender);
+                
+                // Smooth scroll to top
+                document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (err) {
+                mdRender.innerHTML = `<div class="text-red-500">Error loading document.</div>`;
+            } finally {
+                loader.classList.replace('flex', 'hidden');
+            }
+        }
+
+        // Initialize and Refresh Setup
+        document.getElementById('refresh-docs').onclick = scanDocs;
+        scanDocs();
+    </script>
+</body>
+</html>
