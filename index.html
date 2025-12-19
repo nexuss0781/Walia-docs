@@ -3,141 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walia Docs | Secure Specification</title>
+    <title>Walia Docs | Enterprise Specification</title>
     
-    <!-- Dependencies -->
+    <!-- Core Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        /* Professional Font Stack */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
         
         :root {
-            --bg-deep: #020617;
-            --bg-panel: #0f172a;
-            --accent: #6366f1;
-            --text-main: #f1f5f9;
-            --text-dim: #94a3b8;
+            --bg-canvas: #020617;
+            --bg-surface: #0f172a;
+            --accent-primary: #6366f1;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            /* Typographic Constants */
+            --max-reading-width: 820px;
         }
 
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            /* Security: Disable Text Selection */
-            -webkit-user-select: none; user-select: none;
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            /* Security: Lockdown */
+            -webkit-user-select: none; 
+            user-select: none;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Enterprise Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        /* --- ENTERPRISE MARKDOWN TYPOGRAPHY --- */
+        #render-area {
+            max-width: var(--max-reading-width);
+            margin: 0 auto;
+            font-size: 1.05rem;
+            letter-spacing: -0.011em;
+        }
 
-        /* Content Markdown Styling */
-        #render-area h1 { @apply text-4xl font-extrabold text-white mb-8 tracking-tight; }
-        #render-area h2 { @apply text-2xl font-bold text-white mt-12 mb-4 border-b border-slate-800 pb-2; }
-        #render-area h3 { @apply text-lg font-semibold text-indigo-400 mt-8 mb-2 uppercase tracking-wider; }
-        #render-area p { @apply text-slate-400 leading-relaxed mb-6 text-[17px]; }
-        #render-area code { @apply font-mono text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded text-[0.9em]; }
-        #render-area pre { @apply bg-slate-900/50 border border-slate-800 rounded-2xl p-6 my-8 shadow-2xl overflow-x-auto; }
-        #render-area ul { @apply space-y-3 mb-8 text-slate-400 list-none pl-1; }
-        #render-area ul li::before { content: "→"; @apply text-indigo-500 mr-3 font-bold; }
+        /* Vertical Rhythm & Spacing */
+        #render-area h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -0.025em; color: #fff; line-height: 1.2; }
+        #render-area h2 { font-size: 1.75rem; font-weight: 700; margin-top: 4rem; margin-bottom: 1.5rem; color: #f1f5f9; border-bottom: 1px solid #1e293b; padding-bottom: 0.75rem; }
+        #render-area h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 1rem; color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.05em; }
         
-        /* Security Overlay */
+        #render-area p { line-height: 1.85; margin-bottom: 1.75rem; color: #cbd5e1; font-weight: 400; }
+        
+        /* Code Spacing */
+        #render-area code { 
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(99, 102, 241, 0.1); 
+            color: #a5b4fc; 
+            padding: 0.2rem 0.45rem; 
+            border-radius: 6px; 
+            font-size: 0.9em;
+            letter-spacing: 0;
+        }
+        
+        #render-area pre { 
+            margin: 2.5rem 0; 
+            padding: 1.75rem; 
+            border-radius: 16px; 
+            background: #0b0f1a !important; 
+            border: 1px solid #1e293b;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* List Dynamics */
+        #render-area ul, #render-area ol { margin-bottom: 2rem; padding-left: 1.5rem; }
+        #render-area li { margin-bottom: 0.85rem; line-height: 1.7; color: #cbd5e1; position: relative; list-style: none; }
+        #render-area ul li::before { 
+            content: ""; position: absolute; left: -1.5rem; top: 0.7rem; 
+            width: 6px; height: 6px; background: var(--accent-primary); border-radius: 50%; 
+        }
+
+        /* Security Media Query */
         @media print { body { display: none !important; } }
         
-        /* Animations */
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .active-nav {
-            @apply bg-indigo-600/10 text-indigo-400 border-r-2 border-indigo-500;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        
+        .nav-item-active {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+            color: #818cf8 !important;
+            border-left: 2px solid #6366f1;
         }
     </style>
 </head>
 <body class="h-screen flex flex-col">
 
-    <!-- Header -->
-    <header class="h-16 border-b border-slate-800/60 bg-slate-950/50 backdrop-blur-md flex items-center justify-between px-6 z-50">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <!-- Global Header -->
+    <header class="h-14 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-xl flex items-center justify-between px-8 z-50">
+        <div class="flex items-center gap-4">
+            <div class="w-6 h-6 bg-indigo-600 rounded shadow-lg shadow-indigo-500/20 flex items-center justify-center">
+                <div class="w-2 h-2 bg-white rounded-full"></div>
             </div>
-            <span class="font-bold text-lg tracking-tighter text-white uppercase">Walia <span class="text-indigo-500">Docs</span></span>
+            <span class="font-bold text-xs tracking-[0.3em] text-white uppercase">Walia Systems</span>
         </div>
         
         <div class="flex items-center gap-6">
-            <div class="hidden md:flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-slate-500">
-                <span class="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
-                ENCRYPTED READ-ONLY SESSION
+            <div class="hidden lg:flex items-center gap-3 text-[10px] font-bold text-slate-500 tracking-widest uppercase">
+                <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span>
+                Sovereign Environment // Read Only
             </div>
-            <button id="mobile-toggle" class="md:hidden text-slate-400 p-2">
+            <button id="mobile-toggle" class="md:hidden text-slate-400">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
             </button>
         </div>
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="absolute inset-y-0 left-0 w-80 bg-slate-950 border-r border-slate-800/50 z-40 transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 flex flex-col">
-            <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
-                <div id="nav-content" class="space-y-8">
-                    <!-- Skeleton Loader -->
-                    <div class="animate-pulse space-y-4">
-                        <div class="h-3 bg-slate-800 w-1/3 rounded"></div>
-                        <div class="h-8 bg-slate-900 rounded-lg"></div>
-                        <div class="h-8 bg-slate-900 rounded-lg"></div>
-                    </div>
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="absolute inset-y-0 left-0 w-72 bg-slate-950 border-r border-slate-900 z-40 transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 flex flex-col">
+            <div class="p-8 overflow-y-auto flex-1">
+                <div id="nav-container" class="space-y-10">
+                    <!-- Nav items injected here -->
                 </div>
-            </div>
-            <div class="p-4 border-t border-slate-800/50 text-[10px] text-center text-slate-600 font-medium tracking-widest uppercase">
-                &copy; 2024 Walia Systems
             </div>
         </aside>
 
-        <!-- Content Viewer -->
-        <main class="flex-1 overflow-y-auto bg-[#020617] relative">
-            <div id="loading-line" class="absolute top-0 left-0 h-0.5 bg-indigo-500 transition-all duration-500 opacity-0" style="width: 0%"></div>
-            
-            <div class="max-w-4xl mx-auto px-6 py-16 md:px-12">
-                <div id="welcome" class="py-24 text-center">
-                    <div class="inline-block p-4 rounded-3xl bg-slate-900/50 border border-slate-800 mb-6">
-                        <svg class="w-12 h-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-white mb-2">Knowledge Base</h2>
-                    <p class="text-slate-500 text-sm">Select a technical specification from the library to view.</p>
+        <!-- Document Viewer -->
+        <main class="flex-1 overflow-y-auto bg-slate-950 px-6">
+            <div id="scroll-container" class="py-20">
+                <div id="welcome" class="max-w-xl mx-auto text-center py-20">
+                    <h1 class="text-4xl font-extrabold text-slate-200 mb-4 tracking-tighter">Documentation Hub</h1>
+                    <p class="text-slate-500 text-lg leading-relaxed">Select a technical module from the directory to initialize reading.</p>
                 </div>
                 
-                <article id="render-area" class="fade-in hidden"></article>
+                <article id="render-area" class="hidden"></article>
             </div>
         </main>
 
-        <!-- Mobile Overlay -->
-        <div id="overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden"></div>
+        <!-- Overlay for Mobile -->
+        <div id="overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-30 hidden"></div>
     </div>
 
     <script>
+        const DOCS_PATH = 'docs/';
         const MANIFEST_URL = 'docs/manifest.json';
-        const DOCS_BASE = 'docs/';
 
-        // HARDENED SECURITY
+        // SECURITY HARDENING
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
-            if ((e.ctrlKey || e.metaKey) && ['s','c','u','p','a'].includes(e.key.toLowerCase())) {
-                e.preventDefault();
-            }
+            if ((e.ctrlKey || e.metaKey) && ['s','c','u','p','a'].includes(e.key.toLowerCase())) e.preventDefault();
         });
 
-        // UI ELEMENTS
+        // DOM ELEMENTS
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
-        const navContent = document.getElementById('nav-content');
+        const navContainer = document.getElementById('nav-container');
         const renderArea = document.getElementById('render-area');
         const welcome = document.getElementById('welcome');
-        const loading = document.getElementById('loading-line');
 
         const toggleNav = () => {
             sidebar.classList.toggle('-translate-x-full');
@@ -147,82 +166,67 @@
         document.getElementById('mobile-toggle').onclick = toggleNav;
         overlay.onclick = toggleNav;
 
-        // FETCH & BUILD
-        async function loadDocs() {
+        // FETCH MANIFEST & RENDER SIDEBAR
+        async function loadApp() {
             try {
-                const response = await fetch(MANIFEST_URL);
-                const manifest = await response.json();
-                buildSidebar(manifest);
+                const res = await fetch(MANIFEST_URL);
+                const manifest = await res.json();
+                
+                navContainer.innerHTML = '';
+                
+                for (const [category, files] of Object.entries(manifest)) {
+                    const group = document.createElement('div');
+                    group.innerHTML = `<h3 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em] mb-4 px-4">${category}</h3>`;
+                    
+                    const list = document.createElement('div');
+                    list.className = "flex flex-col";
+                    
+                    files.forEach(path => {
+                        const fileName = path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
+                        const btn = document.createElement('button');
+                        btn.className = "w-full text-left px-4 py-2.5 text-[13px] font-semibold text-slate-500 hover:text-indigo-400 transition-all truncate uppercase tracking-tight";
+                        btn.innerText = fileName;
+                        btn.onclick = () => fetchDoc(path, btn);
+                        list.appendChild(btn);
+                    });
+                    
+                    group.appendChild(list);
+                    navContainer.appendChild(group);
+                }
             } catch (err) {
-                navContent.innerHTML = `<p class="text-red-400 text-xs">Manifest Error: Check docs/manifest.json</p>`;
+                navContainer.innerHTML = `<p class="text-red-900 text-[10px] px-4">Error: manifest.json missing in docs/</p>`;
             }
         }
 
-        function buildSidebar(manifest) {
-            navContent.innerHTML = '';
-            for (const [category, files] of Object.entries(manifest)) {
-                const group = document.createElement('div');
-                group.innerHTML = `<h3 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-[0.25em] mb-4 px-3">${category}</h3>`;
-                
-                const list = document.createElement('div');
-                list.className = "space-y-1";
-                
-                files.forEach(path => {
-                    const name = path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
-                    const btn = document.createElement('button');
-                    btn.className = "w-full text-left px-4 py-2.5 text-[13px] font-medium text-slate-400 rounded-xl hover:bg-slate-900 hover:text-white transition-all flex items-center gap-3 group";
-                    btn.innerHTML = `
-                        <span class="w-1 h-1 rounded-full bg-slate-700 group-hover:bg-indigo-500 transition-colors"></span>
-                        <span class="truncate capitalize">${name}</span>
-                    `;
-                    btn.onclick = () => fetchFile(path, btn);
-                    list.appendChild(btn);
-                });
-                
-                group.appendChild(list);
-                navContent.appendChild(group);
-            }
-        }
-
-        async function fetchFile(path, btn) {
-            // UI Active State
-            document.querySelectorAll('#nav-content button').forEach(b => b.classList.remove('active-nav', 'text-white'));
-            btn.classList.add('active-nav', 'text-white');
+        // FETCH DOC & RENDER
+        async function fetchDoc(path, btn) {
+            // UI States
+            document.querySelectorAll('#nav-container button').forEach(b => b.classList.remove('nav-item-active'));
+            btn.classList.add('nav-item-active');
             
             if (window.innerWidth < 768) toggleNav();
-            
-            // Loading Animation
-            loading.style.opacity = '1';
-            loading.style.width = '40%';
-            
+
             try {
-                const res = await fetch(DOCS_BASE + path);
-                const text = await res.text();
-                loading.style.width = '100%';
+                const res = await fetch(DOCS_PATH + path);
+                const md = await res.text();
                 
                 welcome.classList.add('hidden');
                 renderArea.classList.remove('hidden');
                 
-                // Set and Parse
-                renderArea.innerHTML = marked.parse(text);
+                // Content Rendering
+                renderArea.innerHTML = marked.parse(md);
                 
-                // Highlight Code
+                // Post-render Highlight
                 Prism.highlightAllUnder(renderArea);
                 
-                setTimeout(() => {
-                    loading.style.opacity = '0';
-                    loading.style.width = '0%';
-                }, 400);
-
+                // Scroll reset
                 document.querySelector('main').scrollTo({top: 0, behavior: 'smooth'});
-
             } catch (e) {
-                renderArea.innerHTML = `<p class="text-red-500 text-center">Security Error: File inaccessible.</p>`;
+                renderArea.innerHTML = `<p class="text-red-500">Resource unreachable.</p>`;
             }
         }
 
-        // Initialize
-        loadDocs();
+        loadApp();
     </script>
 </body>
 </html>
