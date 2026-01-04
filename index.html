@@ -12,225 +12,263 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
         
         :root {
-            --bg-base: #020617;
-            --bg-sidebar: #0b0f1a;
-            --accent: #6366f1;
-            --text-body: #94a3b8;
-            --text-heading: #f8fafc;
-            --reading-width: 840px;
+            /* Matched to the Walia.jpg background */
+            --bg-base: #0a0b10; 
+            --accent-gold: #c5a059;
+            --accent-indigo: #6366f1;
+            --reading-width: 820px;
         }
 
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: var(--bg-base);
-            color: var(--text-body);
+            color: #94a3b8;
             -webkit-user-select: none; user-select: none;
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- ENTERPRISE TYPOGRAPHY ENGINE --- */
+        /* --- LOGO & SPLASH --- */
+        #splash-screen {
+            background-color: var(--bg-base);
+            z-index: 100;
+        }
+
+        .logo-glow {
+            animation: logo-glow-pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes logo-glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.2)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 30px rgba(197, 160, 89, 0.5)); transform: scale(1.02); }
+        }
+
+        /* --- GHOST HAND INDICATOR --- */
+        .hand-indicator {
+            animation: hand-move 2s infinite ease-in-out;
+            color: var(--accent-gold);
+        }
+
+        @keyframes hand-move {
+            0%, 100% { transform: translate(0, 0) rotate(-10deg); }
+            50% { transform: translate(-20px, 5px) rotate(5deg); }
+        }
+
+        #guide-overlay {
+            backdrop-filter: blur(15px) brightness(0.4);
+            background: rgba(10, 11, 16, 0.7);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- TYPOGRAPHY ENGINE --- */
         #content-area {
             max-width: var(--reading-width);
             margin: 0 auto;
-            font-size: 1.0625rem;
-            line-height: 1.8;
-            letter-spacing: -0.01em;
+            font-size: 1.08rem;
+            line-height: 1.9;
+            letter-spacing: -0.012em;
         }
 
-        #content-area h1 { font-size: 3rem; font-weight: 800; color: #fff; margin-bottom: 2.5rem; letter-spacing: -0.04em; line-height: 1.1; }
-        #content-area h2 { font-size: 1.75rem; font-weight: 700; color: #f1f5f9; margin-top: 4.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.5rem; }
-        #content-area h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin-top: 2.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; }
-        #content-area p { margin-bottom: 1.75rem; }
+        #content-area h1 { font-size: 3.5rem; font-weight: 800; color: #fff; margin-bottom: 3rem; letter-spacing: -0.05em; line-height: 1.1; }
+        #content-area h2 { font-size: 1.8rem; font-weight: 700; color: var(--accent-gold); margin-top: 5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(197, 160, 89, 0.2); padding-bottom: 0.5rem; }
+        #content-area h3 { font-size: 1.1rem; font-weight: 600; color: #fff; margin-top: 3rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.2em; }
         
-        /* Professional Code Formatting */
-        #content-area code { 
-            font-family: 'JetBrains Mono', monospace;
-            background: rgba(99, 102, 241, 0.15); 
-            color: #a5b4fc; 
-            padding: 0.2rem 0.4rem; 
-            border-radius: 4px; 
-            font-size: 0.9em;
-        }
+        #content-area p { margin-bottom: 2.2rem; color: #cbd5e1; }
+        #content-area code { font-family: 'JetBrains Mono', monospace; background: rgba(197, 160, 89, 0.1); color: var(--accent-gold); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+        #content-area pre { background: #050507 !important; border: 1px solid #1a1b23; padding: 2rem; border-radius: 16px; margin: 3rem 0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         
-        #content-area pre { 
-            background: #0b0f1a !important; 
-            border: 1px solid #1e293b; 
-            padding: 1.5rem; 
-            border-radius: 12px; 
-            margin: 2rem 0;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
+        #content-area ul { margin-bottom: 2.5rem; list-style: none; padding-left: 1.5rem; }
+        #content-area li { margin-bottom: 1rem; position: relative; color: #94a3b8; }
+        #content-area li::before { content: "•"; position: absolute; left: -1.5rem; color: var(--accent-gold); font-weight: bold; }
 
-        /* Lists */
-        #content-area ul { margin-bottom: 2rem; list-style: none; padding-left: 1.5rem; }
-        #content-area li { margin-bottom: 0.75rem; position: relative; }
-        #content-area li::before { 
-            content: "—"; position: absolute; left: -1.5rem; color: var(--accent); font-weight: bold; 
-        }
-
-        /* Nav Styling */
-        .active-link {
-            background: linear-gradient(90deg, rgba(99, 102, 241, 0.15) 0%, transparent 100%);
-            color: #818cf8 !important;
-            border-left: 2px solid #6366f1;
-        }
-
-        /* Security Media Query */
+        /* Security Lockdown */
         @media print { body { display: none !important; } }
         
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #1a1b23; border-radius: 10px; }
+
+        .active-link { 
+            background: linear-gradient(90deg, rgba(197, 160, 89, 0.1) 0%, transparent 100%); 
+            color: var(--accent-gold) !important; 
+            border-left: 3px solid var(--accent-gold); 
+        }
+
+        .custom-sidebar-item {
+            transition: all 0.2s ease;
+        }
+        .custom-sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+            transform: translateX(4px);
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col">
 
-    <!-- Header -->
-    <header class="h-14 border-b border-white/5 bg-slate-950/50 backdrop-blur-md flex items-center justify-between px-6 z-50">
-        <div class="flex items-center gap-3">
-            <div class="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                <span class="text-[10px] font-bold text-white">W</span>
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="fixed inset-0 flex flex-col items-center justify-center transition-all duration-1000">
+        <div class="logo-glow mb-12">
+            <img src="Walia.jpg" alt="Walia Logo" class="w-48 h-48 object-contain rounded-full shadow-2xl">
+        </div>
+        <div class="flex flex-col items-center">
+            <h2 class="text-[10px] font-bold tracking-[0.8em] text-slate-500 uppercase mb-4">Initialising Sovereign Protocol</h2>
+            <div class="h-[1px] w-48 bg-slate-900 overflow-hidden">
+                <div id="splash-bar" class="h-full bg-gradient-to-r from-transparent via-gold-500 to-transparent w-0 transition-all duration-700 bg-[#c5a059]"></div>
             </div>
-            <span class="text-xs font-bold tracking-[0.4em] text-white uppercase">Walia Spec Engine</span>
         </div>
-        
+    </div>
+
+    <!-- Guide Overlay -->
+    <div id="guide-overlay" class="fixed inset-0 z-[60] flex items-center justify-start hidden">
+        <div class="ml-8 md:ml-[340px] flex flex-col items-start gap-6">
+            <div class="hand-indicator">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.5 10.5V5.5C15.5 4.11929 14.3807 3 13 3C11.6193 3 10.5 4.11929 10.5 5.5V10.5M10.5 7.5V6.5C10.5 5.11929 9.38071 4 8 4C6.61929 4 5.5 5.11929 5.5 6.5V12.5M15.5 8.5V7.5C15.5 6.11929 16.6193 5 18 5C19.3807 5 20.5 6.11929 20.5 7.5V13.5C20.5 17.0899 17.5899 20 14 20H11.5C9.1837 20 7.02741 18.784 5.80802 16.784L3.75 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="border-l-4 border-[#c5a059] pl-6 py-2">
+                <h3 class="text-white font-extrabold text-2xl mb-1 tracking-tight">Access Repository</h3>
+                <p class="text-slate-400 text-sm max-w-xs leading-relaxed">Select a module from the directory to synchronise documentation.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="h-20 border-b border-white/5 bg-[#0a0b10]/80 backdrop-blur-xl flex items-center justify-between px-10 z-50">
         <div class="flex items-center gap-4">
-            <input type="text" id="search" placeholder="Search spec..." class="hidden md:block bg-slate-900 border border-slate-800 rounded-lg px-3 py-1 text-[11px] text-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 w-48 transition-all">
-            <button id="mobile-toggle" class="md:hidden text-slate-400 p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
-            </button>
+            <img src="Walia.jpg" class="w-10 h-10 rounded-lg shadow-lg">
+            <span class="text-[11px] font-black tracking-[0.5em] text-[#c5a059] uppercase mt-1">Walia Specs</span>
         </div>
+        <button id="mobile-toggle" class="md:hidden text-slate-400 p-2 relative">
+            <span id="mobile-pulse" class="absolute inset-0 rounded-full bg-[#c5a059] animate-ping opacity-0"></span>
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+        </button>
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
         <!-- Sidebar -->
-        <aside id="sidebar" class="absolute inset-y-0 left-0 w-80 bg-slate-950 border-r border-white/5 z-40 transform -translate-x-full transition-transform duration-200 md:relative md:translate-x-0 flex flex-col">
-            <div class="p-6 overflow-y-auto flex-1 scrollbar-hide">
-                <div id="nav-tree" class="space-y-10">
-                    <!-- Categories and Files Injected Here -->
+        <aside id="sidebar" class="absolute inset-y-0 left-0 w-80 bg-[#0a0b10] border-r border-white/5 z-[70] transform -translate-x-full transition-all duration-300 md:relative md:translate-x-0 flex flex-col">
+            <div class="p-8 overflow-y-auto flex-1 scrollbar-hide">
+                <div id="nav-tree" class="space-y-12">
+                    <!-- Nav Items -->
                 </div>
             </div>
         </aside>
 
-        <!-- Main Content Viewer -->
-        <main class="flex-1 overflow-y-auto bg-slate-950 custom-scrollbar relative">
-            <div id="loading-bar" class="absolute top-0 left-0 h-[1px] bg-indigo-500 transition-all duration-300 opacity-0" style="width: 0%"></div>
-            
-            <div class="px-8 py-20">
-                <div id="welcome" class="max-w-xl mx-auto text-center py-32">
-                    <h2 class="text-3xl font-extrabold text-white mb-4 tracking-tighter">System Documentation</h2>
-                    <p class="text-slate-500 text-sm leading-relaxed">Initialized. Awaiting module selection from the secure repository.</p>
-                </div>
-                
-                <article id="content-area" class="hidden animate-in fade-in duration-500"></article>
+        <!-- Viewer -->
+        <main class="flex-1 overflow-y-auto bg-[#0a0b10] relative custom-scrollbar">
+            <div class="px-10 py-24">
+                <article id="content-area" class="hidden opacity-0 transition-opacity duration-1000"></article>
             </div>
         </main>
 
-        <!-- Mobile Overlay -->
-        <div id="overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-30 hidden"></div>
+        <!-- Overlay -->
+        <div id="overlay" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[65] hidden"></div>
     </div>
 
     <script>
         const DOCS_BASE = 'docs/';
         const MANIFEST_URL = 'docs/manifest.json';
-        let fullManifest = {};
-
-        // Security Lockdown
+        
+        // --- SECURITY ---
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if ((e.ctrlKey || e.metaKey) && ['s','c','u','p','a'].includes(e.key.toLowerCase())) e.preventDefault();
         });
 
-        // Toggle UI
+        const splash = document.getElementById('splash-screen');
+        const splashBar = document.getElementById('splash-bar');
+        const guide = document.getElementById('guide-overlay');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
-        const toggle = () => { sidebar.classList.toggle('-translate-x-full'); overlay.classList.toggle('hidden'); };
-        document.getElementById('mobile-toggle').onclick = toggle;
-        overlay.onclick = toggle;
+        const content = document.getElementById('content-area');
+        const mobilePulse = document.getElementById('mobile-pulse');
 
-        // Init App
-        async function init() {
+        async function bootSystem() {
+            setTimeout(() => splashBar.style.width = '100%', 200);
             try {
                 const res = await fetch(MANIFEST_URL);
-                fullManifest = await res.json();
-                renderSidebar(fullManifest);
+                const manifest = await res.json();
+                renderSidebar(manifest);
+                
+                setTimeout(() => {
+                    splash.style.opacity = '0';
+                    setTimeout(() => {
+                        splash.classList.add('hidden');
+                        showGuide();
+                    }, 1000);
+                }, 1800);
             } catch (e) {
-                document.getElementById('nav-tree').innerHTML = `<p class="text-red-500 text-xs px-4">Error: Manifest not found.</p>`;
+                console.error("Boot Failure");
             }
         }
+
+        function showGuide() {
+            guide.classList.remove('hidden');
+            if(window.innerWidth < 768) mobilePulse.classList.remove('opacity-0');
+        }
+
+        function hideGuide() {
+            guide.classList.add('opacity-0');
+            mobilePulse.classList.add('opacity-0');
+            setTimeout(() => guide.classList.add('hidden'), 600);
+        }
+
+        const toggleNav = () => {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            hideGuide();
+        };
+
+        document.getElementById('mobile-toggle').onclick = toggleNav;
+        overlay.onclick = toggleNav;
 
         function renderSidebar(data) {
             const container = document.getElementById('nav-tree');
             container.innerHTML = '';
-
             for (const [category, files] of Object.entries(data)) {
                 const group = document.createElement('div');
-                group.innerHTML = `<h3 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em] mb-4 px-4">${category}</h3>`;
-                
+                group.innerHTML = `<h3 class="text-[9px] font-black text-slate-700 uppercase tracking-[0.4em] mb-6 px-4">${category}</h3>`;
                 const list = document.createElement('div');
-                list.className = "flex flex-col space-y-0.5";
-                
+                list.className = "space-y-1";
                 files.forEach(path => {
-                    const fileName = path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
+                    const name = path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
                     const btn = document.createElement('button');
-                    btn.className = "w-full text-left px-4 py-2 text-[12px] font-semibold text-slate-500 hover:text-indigo-400 transition-all truncate uppercase tracking-tighter";
-                    btn.innerText = fileName;
-                    btn.onclick = () => loadDocument(path, btn);
+                    btn.className = "custom-sidebar-item w-full text-left px-4 py-3 text-[11px] font-bold text-slate-500 hover:text-white rounded-lg truncate uppercase tracking-tight";
+                    btn.innerText = name;
+                    btn.onclick = () => loadDoc(path, btn);
                     list.appendChild(btn);
                 });
-                
                 group.appendChild(list);
                 container.appendChild(group);
             }
         }
 
-        async function loadDocument(path, btn) {
-            const content = document.getElementById('content-area');
-            const welcome = document.getElementById('welcome');
-            const loader = document.getElementById('loading-bar');
-            
-            // UI Update
+        async function loadDoc(path, btn) {
             document.querySelectorAll('#nav-tree button').forEach(b => b.classList.remove('active-link'));
             btn.classList.add('active-link');
-            if (window.innerWidth < 768) toggle();
-
-            // Progress Bar
-            loader.style.opacity = '1'; loader.style.width = '40%';
+            if (window.innerWidth < 768) toggleNav();
+            hideGuide();
 
             try {
                 const res = await fetch(DOCS_BASE + path);
                 const md = await res.text();
-                loader.style.width = '100%';
-                
-                welcome.classList.add('hidden');
                 content.classList.remove('hidden');
+                setTimeout(() => content.style.opacity = '1', 50);
+                
+                // Configure Marked for professional spacing
+                marked.setOptions({ gfm: true, breaks: true });
                 content.innerHTML = marked.parse(md);
-                
                 Prism.highlightAllUnder(content);
-                
-                setTimeout(() => { loader.style.opacity = '0'; loader.style.width = '0%'; }, 400);
                 document.querySelector('main').scrollTo({top: 0, behavior: 'smooth'});
-            } catch (err) {
-                content.innerHTML = `<p class="text-red-500">Resource unreachable.</p>`;
+            } catch (e) {
+                content.innerHTML = `<p class="text-red-500">Node Sync Error.</p>`;
             }
         }
 
-        // Simple Search
-        document.getElementById('search').oninput = (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = {};
-            
-            for (const [cat, files] of Object.entries(fullManifest)) {
-                const matches = files.filter(f => f.toLowerCase().includes(term));
-                if (matches.length > 0) filtered[cat] = matches;
-            }
-            renderSidebar(filtered);
-        };
-
-        init();
+        bootSystem();
     </script>
 </body>
 </html>
