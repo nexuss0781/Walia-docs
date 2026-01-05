@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walia Docs | System Specification</title>
+    <title>Walia Docs | Sovereign Core</title>
     
     <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,7 +15,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
         
         :root {
-            --bg-base: #0a0b10; /* Exact Walia Logo Background Match */
+            --bg-base: #0a0b10; 
             --accent-gold: #c5a059;
             --reading-width: 820px;
         }
@@ -32,18 +32,35 @@
         /* --- TACTILE GUIDE (👉) --- */
         #onboarding-guide {
             z-index: 100;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hand-pointer {
             animation: point-right 1.2s infinite ease-in-out;
-            font-size: 28px;
-            filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.4));
+            font-size: 32px;
+            filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.5));
         }
 
         @keyframes point-right {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(10px); }
+            0%, 100% { transform: translateX(0) scale(1); }
+            50% { transform: translateX(12px) scale(1.1); }
+        }
+
+        /* --- CINEMATIC HOME ELEMENTS --- */
+        .logo-float {
+            animation: floating 6s infinite ease-in-out;
+            filter: drop-shadow(0 0 40px rgba(197, 160, 89, 0.1));
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .status-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
         }
 
         /* --- CONTENT TYPOGRAPHY --- */
@@ -61,7 +78,7 @@
         #content-area code { font-family: 'JetBrains Mono', monospace; background: rgba(197, 160, 89, 0.1); color: var(--accent-gold); padding: 0.2rem 0.4rem; border-radius: 4px; }
         #content-area pre { background: #050507 !important; border: 1px solid #1a1b23; padding: 2rem; border-radius: 16px; margin: 2.5rem 0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
 
-        /* Security Lockdown */
+        /* General UI */
         @media print { body { display: none !important; } }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #1a1b23; border-radius: 10px; }
@@ -73,25 +90,26 @@
         }
 
         .blur-target {
-            transition: filter 0.5s ease, opacity 0.5s ease;
+            transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
         }
     </style>
 </head>
 <body class="h-screen flex flex-col" onclick="dismissInitialGuide()">
 
-    <!-- Splash Screen -->
+    <!-- Splash Loader -->
     <div id="splash" class="fixed inset-0 bg-[#0a0b10] flex flex-col items-center justify-center z-[110] transition-opacity duration-1000">
-        <img src="Walia.jpg" alt="Logo" class="w-64 h-64 object-contain mb-8">
+        <img src="Walia.jpg" alt="Logo" class="w-48 h-48 object-contain mb-8 logo-float">
         <div class="w-48 h-0.5 bg-slate-900 rounded-full overflow-hidden">
-            <div id="load-bar" class="h-full bg-amber-600 w-0 transition-all duration-700"></div>
+            <div id="load-bar" class="h-full bg-amber-600 w-0 transition-all duration-1000"></div>
         </div>
+        <p class="mt-4 text-[10px] font-bold text-slate-700 uppercase tracking-[0.5em]">Establishing Connection</p>
     </div>
 
-    <!-- The Hand Indicator 👉 -->
+    <!-- The Animated Indicator 👉 -->
     <div id="onboarding-guide" class="fixed top-16 left-6 flex items-center gap-4 hidden opacity-0 pointer-events-none">
-        <div class="hand-pointer text-3xl">👉</div>
-        <div class="bg-slate-900/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl shadow-2xl">
-            <p class="text-[10px] font-black text-white uppercase tracking-[0.3em]">Open Docs</p>
+        <div class="hand-pointer">👉</div>
+        <div class="bg-slate-900/40 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl shadow-2xl">
+            <p class="text-[10px] font-black text-white uppercase tracking-[0.3em]">Initialize Directory</p>
         </div>
     </div>
 
@@ -101,9 +119,9 @@
             <button id="mobile-toggle" class="p-2 text-slate-400 hover:text-white transition-colors">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
             </button>
-            <span class="text-[10px] font-black tracking-[0.4em] text-slate-600 uppercase ml-2">Sovereign Spec Engine</span>
+            <span class="text-[10px] font-black tracking-[0.5em] text-slate-600 uppercase ml-2 hidden md:block">Sovereign Specification v1.0</span>
         </div>
-        <img src="Walia.jpg" class="h-10 w-10 object-contain opacity-80" alt="Icon">
+        <img src="Walia.jpg" class="h-8 w-8 object-contain opacity-50" alt="">
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
@@ -111,20 +129,44 @@
         <aside id="sidebar" class="absolute inset-y-0 left-0 w-80 bg-slate-950 border-r border-white/5 z-[80] transform -translate-x-full transition-all duration-300 md:relative md:translate-x-0 flex flex-col">
             <div class="p-8 overflow-y-auto flex-1 custom-scrollbar">
                 <div id="nav-tree" class="space-y-12">
-                    <!-- Nav generated from manifest -->
+                    <!-- Nav items generated here -->
                 </div>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="flex-1 overflow-y-auto bg-transparent relative scroll-smooth">
-            <div id="main-content-wrap" class="px-8 py-24 blur-target blur-md opacity-30">
-                <article id="content-area" class="hidden"></article>
-                <!-- Initial Animation placeholder -->
-                <div id="entry-animation" class="max-w-xl mx-auto text-center py-20">
-                    <img src="Walia.jpg" class="w-32 h-32 mx-auto mb-6 opacity-20 grayscale" alt="">
-                    <h2 class="text-2xl font-bold text-slate-700 tracking-tighter">SPECIFICATION READY</h2>
-                    <p class="text-slate-800 text-xs tracking-widest uppercase mt-2">Initialize module via directory</p>
+            <div id="main-content-wrap" class="blur-target blur-md opacity-20">
+                
+                <!-- HOME HERO (Only visible when no doc is clicked) -->
+                <div id="home-hero" class="min-h-full flex flex-col items-center justify-center py-20 px-6">
+                    <img src="Walia.jpg" class="w-80 h-80 object-contain mb-12 logo-float" alt="Walia">
+                    
+                    <div class="text-center max-w-2xl">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tighter italic">WELCOME TO <span class="text-amber-500">WALIA</span> DOCUMENTATION</h1>
+                        <p class="text-slate-400 text-lg leading-relaxed mb-10 font-medium">The comprehensive technical specification for the Sovereign Ecosystem. Access architecture, neural branchings, and hardware mastery modules from the secure directory.</p>
+                        
+                        <!-- System Pills -->
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <div class="status-badge px-6 py-3 rounded-2xl flex items-center gap-3">
+                                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></span>
+                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Core: Nominal</span>
+                            </div>
+                            <div class="status-badge px-6 py-3 rounded-2xl flex items-center gap-3">
+                                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">97 Modules Detected</span>
+                            </div>
+                            <div class="status-badge px-6 py-3 rounded-2xl flex items-center gap-3">
+                                <span class="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Read-Only Mode</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Markdown Content Container (Hidden by default) -->
+                <div class="px-8 py-24">
+                    <article id="content-area" class="hidden opacity-0 transition-opacity duration-1000"></article>
                 </div>
             </div>
         </main>
@@ -143,12 +185,14 @@
             if ((e.ctrlKey || e.metaKey) && ['s','c','u','p','a'].includes(e.key.toLowerCase())) e.preventDefault();
         });
 
-        // --- UI LOGIC ---
+        // --- UI ELEMENTS ---
         const splash = document.getElementById('splash');
         const guide = document.getElementById('onboarding-guide');
         const wrap = document.getElementById('main-content-wrap');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
+        const homeHero = document.getElementById('home-hero');
+        const contentArea = document.getElementById('content-area');
 
         function toggleNav() {
             sidebar.classList.toggle('-translate-x-full');
@@ -159,8 +203,8 @@
         function dismissInitialGuide() {
             guide.style.opacity = '0';
             guide.style.transform = 'translateY(-10px)';
-            wrap.classList.remove('blur-md', 'opacity-30');
-            setTimeout(() => guide.classList.add('hidden'), 300);
+            wrap.classList.remove('blur-md', 'opacity-20');
+            setTimeout(() => guide.classList.add('hidden'), 400);
         }
 
         document.getElementById('mobile-toggle').onclick = (e) => {
@@ -169,7 +213,7 @@
         };
         overlay.onclick = toggleNav;
 
-        // --- APP INIT ---
+        // --- APP BOOT ---
         async function boot() {
             setTimeout(() => document.getElementById('load-bar').style.width = '100%', 100);
             
@@ -182,12 +226,12 @@
                     splash.style.opacity = '0';
                     setTimeout(() => {
                         splash.classList.add('hidden');
-                        // Trigger Guide
+                        // Show the Guide 👉
                         guide.classList.remove('hidden');
                         setTimeout(() => { guide.style.opacity = '1'; }, 50);
                     }, 1000);
-                }, 1500);
-            } catch (e) { console.error("Manifest missing"); }
+                }, 2000);
+            } catch (e) { console.error("Manifest Error"); }
         }
 
         function renderSidebar(data) {
@@ -217,16 +261,18 @@
             if (window.innerWidth < 768) toggleNav();
             dismissInitialGuide();
 
-            document.getElementById('entry-animation').classList.add('hidden');
-            const area = document.getElementById('content-area');
+            // Hide Home View and Reveal Article
+            homeHero.classList.add('hidden');
+            contentArea.classList.remove('hidden');
+            setTimeout(() => contentArea.style.opacity = '1', 50);
+
             try {
                 const res = await fetch(DOCS_BASE + path);
                 const md = await res.text();
-                area.classList.remove('hidden');
-                area.innerHTML = marked.parse(md);
-                Prism.highlightAllUnder(area);
+                contentArea.innerHTML = marked.parse(md);
+                Prism.highlightAllUnder(contentArea);
                 document.querySelector('main').scrollTo({top: 0, behavior: 'smooth'});
-            } catch (e) { area.innerHTML = "Module connection failed."; }
+            } catch (e) { contentArea.innerHTML = "Synchronization Error."; }
         }
 
         boot();
