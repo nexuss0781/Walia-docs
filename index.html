@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walia Docs | Sovereign Core</title>
+    <title>Walia Docs | Sovereign Masterpiece</title>
     
-    <!-- Dependencies -->
+    <!-- Core Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
@@ -16,6 +16,7 @@
         
         :root {
             --bg-base: #0a0b10; 
+            --accent-blue: #6CABDD; /* Man City Blue */
             --accent-gold: #c5a059;
             --reading-width: 820px;
         }
@@ -29,69 +30,72 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- TACTILE GUIDE (👉) --- */
+        /* --- TACTILE HAND INDICATOR (Pointing Left 👈) --- */
         #onboarding-guide {
             z-index: 100;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s ease;
         }
 
-        .hand-pointer {
-            animation: point-right 1.2s infinite ease-in-out;
-            font-size: 32px;
-            filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.5));
+        .hand-pointer-svg {
+            animation: point-left 1.2s infinite ease-in-out;
+            filter: drop-shadow(0 0 10px var(--accent-blue));
         }
 
-        @keyframes point-right {
+        @keyframes point-left {
             0%, 100% { transform: translateX(0) scale(1); }
-            50% { transform: translateX(12px) scale(1.1); }
+            50% { transform: translateX(-12px) scale(1.1); }
         }
 
-        /* --- CINEMATIC HOME ELEMENTS --- */
-        .logo-float {
-            animation: floating 6s infinite ease-in-out;
-            filter: drop-shadow(0 0 40px rgba(197, 160, 89, 0.1));
+        /* --- HAMBURGER PSYCHOLOGY TRIGGER --- */
+        .glow-trigger {
+            box-shadow: 0 0 0 0 rgba(108, 171, 221, 0.7);
+            animation: pulse-border 2s infinite;
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(108, 171, 221, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(108, 171, 221, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(108, 171, 221, 0); }
         }
 
-        .status-badge {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-        }
-
-        /* --- CONTENT TYPOGRAPHY --- */
+        /* --- MARKDOWN TYPOGRAPHY --- */
         #content-area {
             max-width: var(--reading-width);
             margin: 0 auto;
-            font-size: 1.08rem;
-            line-height: 1.9;
+            font-size: 1.05rem;
+            line-height: 1.85;
         }
 
-        #content-area h1 { font-size: 3.5rem; font-weight: 800; color: #fff; margin-bottom: 2.5rem; letter-spacing: -0.05em; }
-        #content-area h2 { font-size: 1.8rem; font-weight: 700; color: var(--accent-gold); margin-top: 4rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(197, 160, 89, 0.2); padding-bottom: 0.5rem; }
-        #content-area p { margin-bottom: 2rem; color: #cbd5e1; }
+        #content-area h1 { font-size: 3.5rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 2.5rem; letter-spacing: -0.05em; line-height: 1.1; }
+        #content-area h2 { font-size: 1.7rem; font-weight: 700; color: #fff; margin-top: 4rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(108, 171, 221, 0.2); padding-bottom: 0.5rem; }
         
-        #content-area code { font-family: 'JetBrains Mono', monospace; background: rgba(197, 160, 89, 0.1); color: var(--accent-gold); padding: 0.2rem 0.4rem; border-radius: 4px; }
-        #content-area pre { background: #050507 !important; border: 1px solid #1a1b23; padding: 2rem; border-radius: 16px; margin: 2.5rem 0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        @media (max-width: 768px) {
+            #content-area h1 { font-size: 2.2rem; margin-bottom: 1.5rem; }
+            #content-area h2 { font-size: 1.4rem; margin-top: 2.5rem; }
+            #content-area { font-size: 0.95rem; }
+        }
 
-        /* General UI */
+        #content-area p { margin-bottom: 1.8rem; color: #cbd5e1; }
+        #content-area code { font-family: 'JetBrains Mono', monospace; background: rgba(108, 171, 221, 0.1); color: var(--accent-blue); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+        #content-area pre { background: #050507 !important; border: 1px solid #1a1b23; padding: 1.5rem; border-radius: 12px; margin: 2rem 0; }
+
+        /* General UI Styles */
         @media print { body { display: none !important; } }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #1a1b23; border-radius: 10px; }
 
         .active-link { 
-            background: linear-gradient(90deg, rgba(197, 160, 89, 0.1) 0%, transparent 100%); 
-            color: var(--accent-gold) !important; 
-            border-left: 3px solid var(--accent-gold);
+            background: linear-gradient(-90deg, rgba(108, 171, 221, 0.15) 0%, transparent 100%); 
+            color: var(--accent-blue) !important; 
+            border-right: 3px solid var(--accent-blue);
         }
 
         .blur-target {
             transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
         }
+
+        .logo-float { animation: float 6s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
     </style>
 </head>
 <body class="h-screen flex flex-col" onclick="dismissInitialGuide()">
@@ -100,79 +104,80 @@
     <div id="splash" class="fixed inset-0 bg-[#0a0b10] flex flex-col items-center justify-center z-[110] transition-opacity duration-1000">
         <img src="Walia.jpg" alt="Logo" class="w-48 h-48 object-contain mb-8 logo-float">
         <div class="w-48 h-0.5 bg-slate-900 rounded-full overflow-hidden">
-            <div id="load-bar" class="h-full bg-amber-600 w-0 transition-all duration-1000"></div>
+            <div id="load-bar" class="h-full bg-[#6CABDD] w-0 transition-all duration-1000"></div>
         </div>
-        <p class="mt-4 text-[10px] font-bold text-slate-700 uppercase tracking-[0.5em]">Establishing Connection</p>
+        <p class="mt-4 text-[10px] font-bold text-slate-700 uppercase tracking-[0.5em]">System Sync</p>
     </div>
 
-    <!-- The Animated Indicator 👉 -->
-    <div id="onboarding-guide" class="fixed top-16 left-6 flex items-center gap-4 hidden opacity-0 pointer-events-none">
-        <div class="hand-pointer">👉</div>
-        <div class="bg-slate-900/40 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl shadow-2xl">
-            <p class="text-[10px] font-black text-white uppercase tracking-[0.3em]">Initialize Directory</p>
+    <!-- Hand Indicator (👉 Styled, pointing at Hamburger on Right) -->
+    <div id="onboarding-guide" class="fixed top-16 right-20 flex items-center gap-4 hidden opacity-0 pointer-events-none">
+        <div class="bg-slate-900/60 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-xl shadow-2xl">
+            <p class="text-[9px] font-black text-white uppercase tracking-[0.3em]">Initialize Directory</p>
+        </div>
+        <div class="hand-pointer-svg">
+            <!-- Modern SVG Hand pointing left -->
+            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 10V5.5C9 4.11929 7.88071 3 6.5 3C5.11929 3 4 4.11929 4 5.5V14.5C4 18.0899 6.91015 21 10.5 21H13C15.3163 21 17.4726 19.784 18.692 17.784L20.75 14.5" stroke="#6CABDD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 7L4.5 10.5L9 14" stroke="#6CABDD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
     </div>
 
     <!-- Header -->
-    <header class="h-16 border-b border-white/5 bg-slate-950/20 backdrop-blur-md flex items-center justify-between px-6 z-50">
-        <div class="flex items-center gap-3">
-            <button id="mobile-toggle" class="p-2 text-slate-400 hover:text-white transition-colors">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
-            </button>
-            <span class="text-[10px] font-black tracking-[0.5em] text-slate-600 uppercase ml-2 hidden md:block">Sovereign Specification v1.0</span>
+    <header class="h-16 border-b border-white/5 bg-slate-950/20 backdrop-blur-md flex items-center justify-between px-8 z-50">
+        <div class="flex items-center gap-4">
+            <img src="Walia.jpg" class="h-10 w-10 object-contain opacity-80" alt="Icon">
+            <span class="text-[10px] font-black tracking-[0.5em] text-slate-500 uppercase hidden md:block">Walia Spec Engine</span>
         </div>
-        <img src="Walia.jpg" class="h-8 w-8 object-contain opacity-50" alt="">
+        
+        <!-- Hamburger on the Right -->
+        <button id="mobile-toggle" class="p-3 bg-slate-900/50 rounded-xl text-white transition-all glow-trigger border border-[#6CABDD]/30">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+        </button>
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="absolute inset-y-0 left-0 w-80 bg-slate-950 border-r border-white/5 z-[80] transform -translate-x-full transition-all duration-300 md:relative md:translate-x-0 flex flex-col">
+        <!-- Sidebar (Slides from Right) -->
+        <aside id="sidebar" class="absolute inset-y-0 right-0 w-80 bg-slate-950 border-l border-white/5 z-[80] transform translate-x-full transition-all duration-300 md:relative md:translate-x-0 flex flex-col">
             <div class="p-8 overflow-y-auto flex-1 custom-scrollbar">
                 <div id="nav-tree" class="space-y-12">
-                    <!-- Nav items generated here -->
+                    <!-- Nav generated from manifest -->
                 </div>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto bg-transparent relative scroll-smooth">
+        <main class="flex-1 overflow-y-auto bg-transparent relative scroll-smooth order-first">
             <div id="main-content-wrap" class="blur-target blur-md opacity-20">
                 
-                <!-- HOME HERO (Only visible when no doc is clicked) -->
+                <!-- HOME HERO -->
                 <div id="home-hero" class="min-h-full flex flex-col items-center justify-center py-20 px-6">
-                    <img src="Walia.jpg" class="w-80 h-80 object-contain mb-12 logo-float" alt="Walia">
-                    
+                    <img src="Walia.jpg" class="w-72 h-72 object-contain mb-12 logo-float" alt="Walia">
                     <div class="text-center max-w-2xl">
-                        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tighter italic">WELCOME TO <span class="text-amber-500">WALIA</span> DOCUMENTATION</h1>
-                        <p class="text-slate-400 text-lg leading-relaxed mb-10 font-medium">The comprehensive technical specification for the Sovereign Ecosystem. Access architecture, neural branchings, and hardware mastery modules from the secure directory.</p>
+                        <h1 class="text-3xl md:text-5xl font-black text-[#6CABDD] mb-6 tracking-tighter uppercase italic">Welcome to Walia</h1>
+                        <p class="text-slate-400 text-base leading-relaxed mb-10 font-medium">Access the sovereign technical ecosystem. Secure, read-only modules synchronized for architecture and neural specification.</p>
                         
-                        <!-- System Pills -->
-                        <div class="flex flex-wrap justify-center gap-4">
-                            <div class="status-badge px-6 py-3 rounded-2xl flex items-center gap-3">
-                                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></span>
-                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Core: Nominal</span>
+                        <div class="flex flex-wrap justify-center gap-4 opacity-60">
+                            <div class="bg-slate-900/50 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                                <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">97 Spec Modules</span>
                             </div>
-                            <div class="status-badge px-6 py-3 rounded-2xl flex items-center gap-3">
-                                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
-                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">97 Modules Detected</span>
-                            </div>
-                            <div class="status-badge px-6 py-3 rounded-2xl flex items-center gap-3">
-                                <span class="w-2 h-2 bg-indigo-500 rounded-full"></span>
-                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Read-Only Mode</span>
+                            <div class="bg-slate-900/50 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-2">
+                                <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Read-Only Encrypted</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Markdown Content Container (Hidden by default) -->
-                <div class="px-8 py-24">
+                <!-- Markdown Content Container -->
+                <div class="px-8 py-20">
                     <article id="content-area" class="hidden opacity-0 transition-opacity duration-1000"></article>
                 </div>
             </div>
         </main>
 
         <!-- Mobile Overlay -->
-        <div id="overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] hidden"></div>
+        <div id="overlay" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[70] hidden"></div>
     </div>
 
     <script>
@@ -185,7 +190,6 @@
             if ((e.ctrlKey || e.metaKey) && ['s','c','u','p','a'].includes(e.key.toLowerCase())) e.preventDefault();
         });
 
-        // --- UI ELEMENTS ---
         const splash = document.getElementById('splash');
         const guide = document.getElementById('onboarding-guide');
         const wrap = document.getElementById('main-content-wrap');
@@ -195,7 +199,8 @@
         const contentArea = document.getElementById('content-area');
 
         function toggleNav() {
-            sidebar.classList.toggle('-translate-x-full');
+            sidebar.classList.toggle('translate-x-full');
+            sidebar.classList.toggle('translate-x-0');
             overlay.classList.toggle('hidden');
             dismissInitialGuide();
         }
@@ -204,6 +209,7 @@
             guide.style.opacity = '0';
             guide.style.transform = 'translateY(-10px)';
             wrap.classList.remove('blur-md', 'opacity-20');
+            document.getElementById('mobile-toggle').classList.remove('glow-trigger');
             setTimeout(() => guide.classList.add('hidden'), 400);
         }
 
@@ -213,25 +219,22 @@
         };
         overlay.onclick = toggleNav;
 
-        // --- APP BOOT ---
+        // --- BOOT ---
         async function boot() {
             setTimeout(() => document.getElementById('load-bar').style.width = '100%', 100);
-            
             try {
                 const res = await fetch(MANIFEST_URL);
                 const manifest = await res.json();
                 renderSidebar(manifest);
-                
                 setTimeout(() => {
                     splash.style.opacity = '0';
                     setTimeout(() => {
                         splash.classList.add('hidden');
-                        // Show the Guide 👉
                         guide.classList.remove('hidden');
                         setTimeout(() => { guide.style.opacity = '1'; }, 50);
                     }, 1000);
                 }, 2000);
-            } catch (e) { console.error("Manifest Error"); }
+            } catch (e) { console.error("Manifest missing"); }
         }
 
         function renderSidebar(data) {
@@ -245,7 +248,7 @@
                 files.forEach(path => {
                     const name = path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
                     const btn = document.createElement('button');
-                    btn.className = "w-full text-left px-4 py-2 text-[11px] font-bold text-slate-500 hover:text-white transition-all truncate uppercase tracking-tighter";
+                    btn.className = "w-full text-right px-4 py-2 text-[11px] font-bold text-slate-500 hover:text-white transition-all truncate uppercase tracking-tighter";
                     btn.innerText = name;
                     btn.onclick = (e) => { e.stopPropagation(); loadDoc(path, btn); };
                     list.appendChild(btn);
@@ -261,7 +264,6 @@
             if (window.innerWidth < 768) toggleNav();
             dismissInitialGuide();
 
-            // Hide Home View and Reveal Article
             homeHero.classList.add('hidden');
             contentArea.classList.remove('hidden');
             setTimeout(() => contentArea.style.opacity = '1', 50);
@@ -272,7 +274,7 @@
                 contentArea.innerHTML = marked.parse(md);
                 Prism.highlightAllUnder(contentArea);
                 document.querySelector('main').scrollTo({top: 0, behavior: 'smooth'});
-            } catch (e) { contentArea.innerHTML = "Synchronization Error."; }
+            } catch (e) { contentArea.innerHTML = "Node unreachable."; }
         }
 
         boot();
