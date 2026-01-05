@@ -82,23 +82,6 @@
             pointer-events: none;
         }
 
-        /* --- ONBOARDING GUIDE --- */
-        #onboarding-guide {
-            z-index: 110;
-            transition: all 0.4s ease;
-        }
-
-        .guide-box {
-            animation: float-horizontal 2s infinite ease-in-out;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(108, 171, 221, 0.3);
-        }
-
-        @keyframes float-horizontal {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-8px); }
-        }
-
         /* --- TYPOGRAPHY --- */
         #content-area {
             max-width: var(--reading-width);
@@ -109,14 +92,40 @@
 
         #content-area h1 { font-size: 3.5rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 2rem; letter-spacing: -0.05em; line-height: 1.1; }
         #content-area h2 { font-size: 1.75rem; font-weight: 700; color: #fff; margin-top: 4rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(108, 171, 221, 0.15); padding-bottom: 0.5rem; }
-        
-        @media (max-width: 768px) {
-            #content-area h1 { font-size: 2rem; }
-            #content-area h2 { font-size: 1.3rem; }
-        }
-
+        #content-area p { margin-bottom: 1.8rem; color: #cbd5e1; }
         #content-area code { font-family: 'JetBrains Mono', monospace; background: rgba(108, 171, 221, 0.1); color: var(--accent-blue); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
         #content-area pre { background: #050507 !important; border: 1px solid #1a1b23; padding: 1.5rem; border-radius: 12px; margin: 2.25rem 0; }
+
+        /* --- NEXT/PREV NAVIGATOR --- */
+        .doc-nav-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 6rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .doc-nav-card {
+            flex: 1;
+            padding: 1.5rem;
+            background: #050508;
+            border: 1px solid rgba(108, 171, 221, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .doc-nav-card:hover {
+            border-color: var(--accent-blue);
+            background: rgba(108, 171, 221, 0.03);
+            transform: translateY(-2px);
+        }
+
+        .doc-nav-label { font-size: 10px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+        .doc-nav-title { font-size: 13px; font-weight: 700; color: #f1f5f9; text-transform: uppercase; }
 
         /* General UI */
         .glow-trigger { animation: pulse-border 2s infinite; }
@@ -140,16 +149,15 @@
         </div>
     </div>
 
-    <!-- Header (Always Visible, Never Blurred) -->
+    <!-- Header (Always Visible) -->
     <header class="h-16 border-b border-white/5 bg-slate-950/40 backdrop-blur-md flex items-center justify-between px-8 z-[120]">
         <div class="flex items-center gap-4">
             <img src="Walia.jpg" class="h-10 w-10 object-contain opacity-80" alt="">
             <span class="text-[10px] font-black tracking-[0.4em] text-slate-600 uppercase hidden md:block italic">Sovereign Specification</span>
         </div>
         
-        <!-- Onboarding Box ( 👉 styled logic, but text only) -->
         <div id="onboarding-guide" class="flex items-center gap-4 mr-4 hidden opacity-0 pointer-events-none">
-            <div class="guide-box backdrop-blur-xl px-5 py-2 rounded-xl">
+            <div class="bg-slate-900/80 border border-[#6CABDD]/30 backdrop-blur-xl px-5 py-2 rounded-xl">
                 <p class="text-[10px] font-black text-white uppercase tracking-[0.3em] animate-pulse">Initialize Directory</p>
             </div>
         </div>
@@ -160,19 +168,15 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
-        <!-- Minimized Sidebar (Slides from Right) -->
+        <!-- Sidebar -->
         <aside id="sidebar" class="absolute inset-y-0 right-0 bg-slate-950 border-l border-white/5 transform translate-x-full transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col">
             <div class="py-8 overflow-y-auto flex-1 custom-scrollbar">
-                <div id="nav-tree" class="space-y-10">
-                    <!-- Nav items -->
-                </div>
+                <div id="nav-tree" class="space-y-10"></div>
             </div>
         </aside>
 
-        <!-- Main Content Area -->
+        <!-- Main Content -->
         <main id="viewer-container" class="flex-1 overflow-y-auto bg-transparent relative scroll-smooth order-first blur-md opacity-20">
-            
-            <!-- Home Hero -->
             <div id="home-hero" class="min-h-full flex flex-col items-center justify-center py-20 px-6">
                 <img src="Walia.jpg" class="w-64 h-64 object-contain mb-10 opacity-20 grayscale" alt="Walia">
                 <div class="text-center max-w-xl">
@@ -181,9 +185,10 @@
                 </div>
             </div>
 
-            <!-- Markdown Content Container -->
             <div class="px-8 py-20">
                 <article id="content-area" class="hidden opacity-0 transition-opacity duration-1000"></article>
+                <!-- Navigator Hook -->
+                <div id="doc-navigator" class="hidden max-w-[820px] mx-auto"></div>
             </div>
         </main>
 
@@ -194,8 +199,8 @@
     <script>
         const MANIFEST_URL = 'docs/manifest.json';
         const DOCS_BASE = 'docs/';
+        let flatFileList = []; // Used for Prev/Next tracking
 
-        // --- SECURITY ---
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if ((e.ctrlKey || e.metaKey) && ['s','c','u','p','a'].includes(e.key.toLowerCase())) e.preventDefault();
@@ -208,10 +213,10 @@
         const overlay = document.getElementById('overlay');
         const homeHero = document.getElementById('home-hero');
         const contentArea = document.getElementById('content-area');
+        const docNavigator = document.getElementById('doc-navigator');
 
         function toggleNav() {
             const isOpen = sidebar.classList.contains('translate-x-0');
-            
             if (isOpen) {
                 sidebar.classList.replace('translate-x-0', 'translate-x-full');
                 viewer.classList.remove('viewer-blur');
@@ -232,18 +237,19 @@
             setTimeout(() => guide.classList.add('hidden'), 400);
         }
 
-        document.getElementById('mobile-toggle').onclick = (e) => {
-            e.stopPropagation();
-            toggleNav();
-        };
+        document.getElementById('mobile-toggle').onclick = (e) => { e.stopPropagation(); toggleNav(); };
         overlay.onclick = toggleNav;
 
-        // --- APP INIT ---
         async function boot() {
             setTimeout(() => document.getElementById('load-bar').style.width = '100%', 100);
             try {
                 const res = await fetch(MANIFEST_URL);
                 const manifest = await res.json();
+                
+                // Flatten manifest for navigation
+                flatFileList = [];
+                for (const cat in manifest) { manifest[cat].forEach(path => flatFileList.push(path)); }
+                
                 renderSidebar(manifest);
                 setTimeout(() => {
                     splash.style.opacity = '0';
@@ -253,7 +259,7 @@
                         setTimeout(() => { guide.style.opacity = '1'; }, 50);
                     }, 1000);
                 }, 2000);
-            } catch (e) { console.error("Manifest error"); }
+            } catch (e) { console.error("Boot Error"); }
         }
 
         function renderSidebar(data) {
@@ -263,32 +269,36 @@
                 const group = document.createElement('div');
                 group.innerHTML = `<h3 class="category-label">${category}</h3>`;
                 const list = document.createElement('div');
-                
                 files.forEach(path => {
-                    const name = path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
                     const btn = document.createElement('button');
                     btn.className = "nav-btn";
-                    btn.innerText = name;
-                    btn.onclick = (e) => { e.stopPropagation(); loadDoc(path, btn); };
+                    btn.innerText = cleanName(path);
+                    btn.id = "btn-" + btoa(path).replace(/=/g, '');
+                    btn.onclick = (e) => { e.stopPropagation(); loadDoc(path); };
                     list.appendChild(btn);
                 });
-                
                 group.appendChild(list);
                 container.appendChild(group);
             }
         }
 
-        async function loadDoc(path, btn) {
+        function cleanName(path) {
+            return path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
+        }
+
+        async function loadDoc(path) {
+            // Update Active State
             document.querySelectorAll('#nav-tree button').forEach(b => b.classList.remove('active-link'));
-            btn.classList.add('active-link');
-            
-            // Close Sidebar and Unblur
+            const activeBtn = document.getElementById("btn-" + btoa(path).replace(/=/g, ''));
+            if(activeBtn) activeBtn.classList.add('active-link');
+
+            // UI Transitions
             sidebar.classList.replace('translate-x-0', 'translate-x-full');
             viewer.classList.remove('viewer-blur');
             overlay.classList.add('hidden');
-
             homeHero.classList.add('hidden');
             contentArea.classList.remove('hidden');
+            docNavigator.classList.remove('hidden');
             setTimeout(() => contentArea.style.opacity = '1', 50);
 
             try {
@@ -296,8 +306,33 @@
                 const md = await res.text();
                 contentArea.innerHTML = marked.parse(md);
                 Prism.highlightAllUnder(contentArea);
-                document.getElementById('viewer-container').scrollTo({top: 0, behavior: 'smooth'});
+                
+                renderDocNavigator(path);
+                viewer.scrollTo({top: 0, behavior: 'smooth'});
             } catch (e) { contentArea.innerHTML = "Sync Error."; }
+        }
+
+        function renderDocNavigator(currentPath) {
+            const index = flatFileList.indexOf(currentPath);
+            const prev = flatFileList[index - 1];
+            const next = flatFileList[index + 1];
+
+            docNavigator.innerHTML = `
+                <div class="doc-nav-container">
+                    ${prev ? `
+                        <div class="doc-nav-card" onclick="loadDoc('${prev}')">
+                            <span class="doc-nav-label">Previous Module</span>
+                            <span class="doc-nav-title">← ${cleanName(prev)}</span>
+                        </div>
+                    ` : '<div class="flex-1"></div>'}
+                    ${next ? `
+                        <div class="doc-nav-card items-end text-right" onclick="loadDoc('${next}')">
+                            <span class="doc-nav-label">Next Module</span>
+                            <span class="doc-nav-title">${cleanName(next)} →</span>
+                        </div>
+                    ` : '<div class="flex-1"></div>'}
+                </div>
+            `;
         }
 
         boot();
