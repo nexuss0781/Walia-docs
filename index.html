@@ -17,7 +17,6 @@
         :root {
             --bg-base: #0a0b10; 
             --accent-blue: #6CABDD; /* Man City Blue */
-            --accent-gold: #c5a059;
             --reading-width: 820px;
         }
 
@@ -30,35 +29,34 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- TACTILE HAND INDICATOR (Pointing Left 👈) --- */
+        /* --- CLEAN ONBOARDING GUIDE --- */
         #onboarding-guide {
             z-index: 100;
             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s ease;
         }
 
-        .hand-pointer-svg {
-            animation: point-left 1.2s infinite ease-in-out;
-            filter: drop-shadow(0 0 10px var(--accent-blue));
+        .guide-box {
+            animation: float-horizontal 2s infinite ease-in-out;
+            box-shadow: 0 0 30px rgba(108, 171, 221, 0.15);
         }
 
-        @keyframes point-left {
-            0%, 100% { transform: translateX(0) scale(1); }
-            50% { transform: translateX(-12px) scale(1.1); }
+        @keyframes float-horizontal {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-10px); }
         }
 
-        /* --- HAMBURGER PSYCHOLOGY TRIGGER --- */
+        /* --- PULSING MENU TRIGGER --- */
         .glow-trigger {
-            box-shadow: 0 0 0 0 rgba(108, 171, 221, 0.7);
             animation: pulse-border 2s infinite;
         }
 
         @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 0 rgba(108, 171, 221, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(108, 171, 221, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(108, 171, 221, 0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(108, 171, 221, 0); }
             100% { box-shadow: 0 0 0 0 rgba(108, 171, 221, 0); }
         }
 
-        /* --- MARKDOWN TYPOGRAPHY --- */
+        /* --- TYPOGRAPHY ENGINE --- */
         #content-area {
             max-width: var(--reading-width);
             margin: 0 auto;
@@ -70,30 +68,25 @@
         #content-area h2 { font-size: 1.7rem; font-weight: 700; color: #fff; margin-top: 4rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(108, 171, 221, 0.2); padding-bottom: 0.5rem; }
         
         @media (max-width: 768px) {
-            #content-area h1 { font-size: 2.2rem; margin-bottom: 1.5rem; }
-            #content-area h2 { font-size: 1.4rem; margin-top: 2.5rem; }
-            #content-area { font-size: 0.95rem; }
+            #content-area h1 { font-size: 2.2rem; }
+            #content-area h2 { font-size: 1.4rem; }
         }
 
-        #content-area p { margin-bottom: 1.8rem; color: #cbd5e1; }
         #content-area code { font-family: 'JetBrains Mono', monospace; background: rgba(108, 171, 221, 0.1); color: var(--accent-blue); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
         #content-area pre { background: #050507 !important; border: 1px solid #1a1b23; padding: 1.5rem; border-radius: 12px; margin: 2rem 0; }
 
-        /* General UI Styles */
+        /* Security & UI */
         @media print { body { display: none !important; } }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #1a1b23; border-radius: 10px; }
 
         .active-link { 
-            background: linear-gradient(-90deg, rgba(108, 171, 221, 0.15) 0%, transparent 100%); 
+            background: linear-gradient(90deg, rgba(108, 171, 221, 0.1) 0%, transparent 100%); 
             color: var(--accent-blue) !important; 
-            border-right: 3px solid var(--accent-blue);
+            border-left: 2px solid var(--accent-blue);
         }
 
-        .blur-target {
-            transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
-        }
-
+        .blur-target { transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease; }
         .logo-float { animation: float 6s infinite ease-in-out; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
     </style>
@@ -106,20 +99,13 @@
         <div class="w-48 h-0.5 bg-slate-900 rounded-full overflow-hidden">
             <div id="load-bar" class="h-full bg-[#6CABDD] w-0 transition-all duration-1000"></div>
         </div>
-        <p class="mt-4 text-[10px] font-bold text-slate-700 uppercase tracking-[0.5em]">System Sync</p>
+        <p class="mt-4 text-[9px] font-bold text-slate-700 uppercase tracking-[0.5em]">Establishing Connection</p>
     </div>
 
-    <!-- Hand Indicator (👉 Styled, pointing at Hamburger on Right) -->
+    <!-- Onboarding Guide (Clean Box, No Icon) -->
     <div id="onboarding-guide" class="fixed top-16 right-20 flex items-center gap-4 hidden opacity-0 pointer-events-none">
-        <div class="bg-slate-900/60 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-xl shadow-2xl">
-            <p class="text-[9px] font-black text-white uppercase tracking-[0.3em]">Initialize Directory</p>
-        </div>
-        <div class="hand-pointer-svg">
-            <!-- Modern SVG Hand pointing left -->
-            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 10V5.5C9 4.11929 7.88071 3 6.5 3C5.11929 3 4 4.11929 4 5.5V14.5C4 18.0899 6.91015 21 10.5 21H13C15.3163 21 17.4726 19.784 18.692 17.784L20.75 14.5" stroke="#6CABDD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9 7L4.5 10.5L9 14" stroke="#6CABDD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <div class="guide-box bg-slate-900/80 backdrop-blur-xl border border-[#6CABDD]/40 px-5 py-3 rounded-2xl">
+            <p class="text-[10px] font-black text-white uppercase tracking-[0.4em] animate-pulse">Initialize Directory</p>
         </div>
     </div>
 
@@ -127,21 +113,21 @@
     <header class="h-16 border-b border-white/5 bg-slate-950/20 backdrop-blur-md flex items-center justify-between px-8 z-50">
         <div class="flex items-center gap-4">
             <img src="Walia.jpg" class="h-10 w-10 object-contain opacity-80" alt="Icon">
-            <span class="text-[10px] font-black tracking-[0.5em] text-slate-500 uppercase hidden md:block">Walia Spec Engine</span>
+            <span class="text-[10px] font-black tracking-[0.5em] text-slate-500 uppercase hidden md:block italic">Walia Core Specification</span>
         </div>
         
-        <!-- Hamburger on the Right -->
+        <!-- Hamburger on Right -->
         <button id="mobile-toggle" class="p-3 bg-slate-900/50 rounded-xl text-white transition-all glow-trigger border border-[#6CABDD]/30">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16m-7 6h7"/></svg>
         </button>
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
-        <!-- Sidebar (Slides from Right) -->
-        <aside id="sidebar" class="absolute inset-y-0 right-0 w-80 bg-slate-950 border-l border-white/5 z-[80] transform translate-x-full transition-all duration-300 md:relative md:translate-x-0 flex flex-col">
-            <div class="p-8 overflow-y-auto flex-1 custom-scrollbar">
-                <div id="nav-tree" class="space-y-12">
-                    <!-- Nav generated from manifest -->
+        <!-- Minimized Sidebar (Slides from Right) -->
+        <aside id="sidebar" class="absolute inset-y-0 right-0 w-72 bg-slate-950 border-l border-white/5 z-[80] transform translate-x-full transition-all duration-300 md:relative md:translate-x-0 flex flex-col">
+            <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
+                <div id="nav-tree" class="space-y-10">
+                    <!-- Links Generated via Manifest -->
                 </div>
             </div>
         </aside>
@@ -150,26 +136,17 @@
         <main class="flex-1 overflow-y-auto bg-transparent relative scroll-smooth order-first">
             <div id="main-content-wrap" class="blur-target blur-md opacity-20">
                 
-                <!-- HOME HERO -->
+                <!-- Home Hero (Splash Text) -->
                 <div id="home-hero" class="min-h-full flex flex-col items-center justify-center py-20 px-6">
-                    <img src="Walia.jpg" class="w-72 h-72 object-contain mb-12 logo-float" alt="Walia">
+                    <img src="Walia.jpg" class="w-64 h-64 object-contain mb-10 logo-float" alt="Walia">
                     <div class="text-center max-w-2xl">
                         <h1 class="text-3xl md:text-5xl font-black text-[#6CABDD] mb-6 tracking-tighter uppercase italic">Welcome to Walia</h1>
-                        <p class="text-slate-400 text-base leading-relaxed mb-10 font-medium">Access the sovereign technical ecosystem. Secure, read-only modules synchronized for architecture and neural specification.</p>
-                        
-                        <div class="flex flex-wrap justify-center gap-4 opacity-60">
-                            <div class="bg-slate-900/50 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-2">
-                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">97 Spec Modules</span>
-                            </div>
-                            <div class="bg-slate-900/50 px-4 py-2 rounded-lg border border-white/5 flex items-center gap-2">
-                                <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Read-Only Encrypted</span>
-                            </div>
-                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-10 font-medium">Encrypted technical directory. Select a module from the right-side directory to begin synchronization.</p>
+                        <div class="h-px w-20 bg-[#6CABDD]/20 mx-auto"></div>
                     </div>
                 </div>
 
-                <!-- Markdown Content Container -->
+                <!-- Markdown Content View -->
                 <div class="px-8 py-20">
                     <article id="content-area" class="hidden opacity-0 transition-opacity duration-1000"></article>
                 </div>
@@ -184,7 +161,7 @@
         const MANIFEST_URL = 'docs/manifest.json';
         const DOCS_BASE = 'docs/';
 
-        // --- SECURITY ---
+        // Security Lockdown
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if ((e.ctrlKey || e.metaKey) && ['s','c','u','p','a'].includes(e.key.toLowerCase())) e.preventDefault();
@@ -219,7 +196,6 @@
         };
         overlay.onclick = toggleNav;
 
-        // --- BOOT ---
         async function boot() {
             setTimeout(() => document.getElementById('load-bar').style.width = '100%', 100);
             try {
@@ -242,17 +218,20 @@
             container.innerHTML = '';
             for (const [category, files] of Object.entries(data)) {
                 const group = document.createElement('div');
-                group.innerHTML = `<h3 class="text-[9px] font-black text-slate-700 uppercase tracking-[0.4em] mb-6 px-4">${category}</h3>`;
+                group.innerHTML = `<h3 class="text-[9px] font-black text-slate-700 uppercase tracking-[0.3em] mb-4 px-5">${category}</h3>`;
                 const list = document.createElement('div');
-                list.className = "space-y-1";
+                list.className = "space-y-0.5";
+                
                 files.forEach(path => {
                     const name = path.split('/').pop().replace('.md', '').replace(/^\d+_/, '').replace(/_/g, ' ');
                     const btn = document.createElement('button');
-                    btn.className = "w-full text-right px-4 py-2 text-[11px] font-bold text-slate-500 hover:text-white transition-all truncate uppercase tracking-tighter";
+                    // STRICT LEFT ALIGNMENT
+                    btn.className = "w-full text-left px-5 py-2 text-[11px] font-bold text-slate-500 hover:text-[#6CABDD] transition-all truncate uppercase tracking-tighter border-l border-transparent hover:border-[#6CABDD]";
                     btn.innerText = name;
                     btn.onclick = (e) => { e.stopPropagation(); loadDoc(path, btn); };
                     list.appendChild(btn);
                 });
+                
                 group.appendChild(list);
                 container.appendChild(group);
             }
